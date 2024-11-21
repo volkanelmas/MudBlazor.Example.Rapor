@@ -29,7 +29,7 @@ for (int i = 1; i < 5; i++)
 Sells.Add(new Sell
 {
     Id = 10,
-    CreatedDate = new DateTime(2024, 11, 20),
+    CreatedDate = new DateTime(2024, 11, 03),
     CustomerId = 18091,
     ProductName = "Akaryakýt",
     Status = "Tamamlandý",

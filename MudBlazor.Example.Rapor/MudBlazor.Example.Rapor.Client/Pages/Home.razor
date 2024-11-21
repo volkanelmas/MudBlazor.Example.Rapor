@@ -9,9 +9,7 @@
     <MudItem md="12">
         <MudGrid>
             <MudItem md="2">
-                <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
-                               Class="TitleButtonBack"
-                               Edge="Edge.Start" />
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Class="TitleButtonBack" Edge="Edge.Start" />
             </MudItem>
             <MudItem md="8">
                 <h3 Class="d-flex align-center justify-center py-4">
@@ -19,9 +17,7 @@
                 </h3>
             </MudItem>
             <MudItem md="2">
-                <MudIconButton Icon="@Icons.Material.Filled.FormatListBulleted"
-                               Class="TitleButtonFiltre"
-                               Edge="Edge.End" />
+                <MudIconButton Icon="@Icons.Material.Filled.FormatListBulleted" Class="TitleButtonFiltre" Edge="Edge.End" />
             </MudItem>
         </MudGrid>
     </MudItem>
@@ -64,16 +60,16 @@
     <MudItem md="12" Style="padding-left:15px">
         <MudGrid>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(1))">Son 24 Saat</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(-1))">Son 24 Saat</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(7))">Son 7 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(-7))">Son 7 Gün</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(15))">Son 15 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(-15))">Son 15 Gün</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(30))">Son 30 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(-30))">Son 30 Gün</MudButton>
             </MudItem>
         </MudGrid>
     </MudItem>
@@ -91,16 +87,14 @@
             <Columns>
                 <TemplateColumn CellClass="CellClass">
                     <CellTemplate>
-
                         <MudGrid>
-
                             @* sol sütun01 *@
-                            <MudItem xs="6" Style="border-right:1px solid;">
+                            <MudItem xs="6">
                                 <div>
                                     <div class="itemTitle">
                                         TARİH
                                     </div>
-                                    <div class="item">
+                                    <div class="item borderRight1px">
                                         <span>@context.Item.CreatedDate.ToShortDateString()</span>
                                     </div>
                                 </div>
@@ -108,7 +102,7 @@
                                     <div class="itemTitle">
                                         MÜŞTERİ NO
                                     </div>
-                                    <div class="item">
+                                    <div class="item borderRight1px">
                                         <span>@context.Item.CustomerId</span>
                                     </div>
                                 </div>
@@ -133,12 +127,12 @@
                                 </div>
                             </MudItem>
                             @* sol sütun02 *@
-                            <MudItem xs="6" Style="border-right:1px solid;margin-top:10px">
+                            <MudItem xs="6" Style="margin-top:10px">
                                 <div>
                                     <div class="itemTitle">
                                         ÜRÜN
                                     </div>
-                                    <div class="item">
+                                    <div class="item borderRight1px">
                                         <span>@context.Item.ProductName</span>
                                     </div>
                                 </div>
@@ -146,7 +140,7 @@
                                     <div class="itemTitle">
                                         DURUM
                                     </div>
-                                    <div class="item">
+                                    <div class="item borderRight1px">
                                         <span>@context.Item.Status</span>
                                     </div>
                                 </div>
@@ -154,7 +148,7 @@
                                     <div class="itemTitle">
                                         SİPARİŞ TİPİ
                                     </div>
-                                    <div class="item">
+                                    <div class="item borderRight1px">
                                         <span>@context.Item.OrderType</span>
                                     </div>
                                 </div>
@@ -203,7 +197,7 @@
 
 @code {
     private DateTime _startDate = new DateTime(2024, 10, 4);
-    private DateTime _endDate = DateTime.Now;
+    private DateTime _endDate = new DateTime(2024, 11, 4);
     private List<Sell> Elements = SellList.Sells;
     private List<string> _plateList = new();
 
@@ -214,13 +208,16 @@
 
     public void AddTime(int day)
     {
-        _startDate = DateTime.Now.AddDays(-day);
-        _endDate = DateTime.Now;
+        var date = DateTime.Now;
+        _startDate = new DateTime(date.Year, date.Month, date.Day).AddDays(day);
+        _endDate = new DateTime(date.Year, date.Month, date.Day);
     }
     public void SetFilter()
     {
         SetSell();
-        Elements = Elements.Where(x => x.CreatedDate >= _startDate && x.CreatedDate < _endDate.AddDays(1)).ToList();
+        Elements = Elements.Where(x =>
+            x.CreatedDate >= _startDate &&
+            x.CreatedDate < _endDate.AddDays(1)).ToList();
         if (_plateList.Count > 0)
             Elements = Elements.Where(x => _plateList.Contains(x.Plate)).ToList();
     }
@@ -230,12 +227,12 @@
     }
     public void OnStartDateChange(DateTime? newDate)
     {
-        _startDate = newDate ?? DateTime.Now;
+        _startDate = newDate ?? _startDate;
         SetFilter();
     }
     public void OnEndDateChange(DateTime? newDate)
     {
-        _endDate = newDate ?? DateTime.Now;
+        _endDate = newDate ?? _endDate;
         SetFilter();
     }
 
@@ -311,6 +308,10 @@
         .item span {
             margin-left: 10px;
         }
+
+    .borderRight1px {
+        border-right: 1px solid;
+    }
 
     .title {
         font-weight: bold;
