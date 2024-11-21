@@ -2,8 +2,6 @@
 @inject ISnackbar Snackbar
 @page "/"
 
-@inject IDialogService DialogService
-
 <PageTitle>Home</PageTitle>
 
 <MudGrid>
@@ -50,7 +48,7 @@
 
     @* plaka popup *@
     <MudItem md="12" Style="padding-left:0px">
-        <div @onclick="PlatePopupOpen" class="platePopupButton">
+        <div class="plateBody">
             @if (_plateList != null)
             {
                 foreach (var item in this._plateList)
@@ -58,6 +56,7 @@
                     <span class="itemPlate">@item</span>
                 }
             }
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowRight" @onclick="PlatePopupOpen" Class="platePopupButton" />
         </div>
     </MudItem>
 
@@ -65,16 +64,16 @@
     <MudItem md="12" Style="padding-left:15px">
         <MudGrid>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(1))">Son 24 Saat</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(1))">Son 24 Saat</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(7))">Son 7 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(7))">Son 7 Gün</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(15))">Son 15 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(15))">Son 15 Gün</MudButton>
             </MudItem>
             <MudItem md="3">
-                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(30))">Son 30 Gün</MudButton>
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> AddTime(30))">Son 30 Gün</MudButton>
             </MudItem>
         </MudGrid>
     </MudItem>
@@ -92,87 +91,106 @@
             <Columns>
                 <TemplateColumn CellClass="CellClass">
                     <CellTemplate>
+
                         <MudGrid>
 
                             @* sol sütun01 *@
                             <MudItem xs="6" Style="border-right:1px solid;">
-                                <MudGrid>
-                                    <MudItem xs="6" Class="title">
+                                <div>
+                                    <div class="itemTitle">
                                         TARİH
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        @context.Item.CreatedDate.ToShortDateString()
-                                    </MudItem>
-                                    <MudItem xs="6" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.CreatedDate.ToShortDateString()</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         MÜŞTERİ NO
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        @context.Item.CustomerId
-                                    </MudItem>
-                                </MudGrid>
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.CustomerId</span>
+                                    </div>
+                                </div>
                             </MudItem>
                             @* sağ sütun01 *@
                             <MudItem xs="6">
-                                <MudGrid>
-                                    <MudItem xs="7" Class="title">
+                                <div>
+                                    <div class="itemTitle">
                                         PLAKA
-                                    </MudItem>
-                                    <MudItem xs="5">
-                                        @context.Item.Plate
-                                    </MudItem>
-                                    <MudItem xs="7" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.Plate</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         LOKASYON
-                                    </MudItem>
-                                    <MudItem xs="5">
-                                        @context.Item.Location
-                                    </MudItem>
-                                </MudGrid>
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.Location</span>
+                                    </div>
+                                </div>
                             </MudItem>
                             @* sol sütun02 *@
-                            <MudItem xs="6" Style="border-right:1px solid;margin-top:20px">
-                                <MudGrid>
-                                    <MudItem xs="6" Class="title">
+                            <MudItem xs="6" Style="border-right:1px solid;margin-top:10px">
+                                <div>
+                                    <div class="itemTitle">
                                         ÜRÜN
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        @context.Item.ProductName
-                                    </MudItem>
-                                    <MudItem xs="6" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.ProductName</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         DURUM
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        @context.Item.Status
-                                    </MudItem>
-                                    <MudItem xs="6" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.Status</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         SİPARİŞ TİPİ
-                                    </MudItem>
-                                    <MudItem xs="6">
-                                        @context.Item.OrderType
-                                    </MudItem>
-                                </MudGrid>
+                                    </div>
+                                    <div class="item">
+                                        <span>@context.Item.OrderType</span>
+                                    </div>
+                                </div>
                             </MudItem>
                             @* sağ sütun02 *@
-                            <MudItem xs="6" Style=";margin-top:20px">
-                                <MudGrid>
-                                    <MudItem xs="7" Class="title">
+                            <MudItem xs="6" Style="margin-top:10px">
+                                <div>
+                                    <div class="itemTitle">
                                         İNDİRİM TUTARI
-                                    </MudItem>
-                                    <MudItem xs="5">
-                                        @context.Item.DiscountAmount
-                                    </MudItem>
-                                    <MudItem xs="7" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>
+                                            @String.Format("{0:N2} ₺", context.Item.DiscountAmount)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         TOPLAM ADET
-                                    </MudItem>
-                                    <MudItem xs="5">
-                                        @context.Item.TotalPiece
-                                    </MudItem>
-                                    <MudItem xs="7" Class="title">
+                                    </div>
+                                    <div class="item">
+                                        <span>
+                                            @String.Format("{0:N2} lt", context.Item.TotalPiece)
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="itemTitle">
                                         TOPLAM TUTAR
-                                    </MudItem>
-                                    <MudItem xs="5">
-                                        @context.Item.TotalAmount
-                                    </MudItem>
-                                </MudGrid>
+                                    </div>
+                                    <div class="item">
+                                        <span>
+                                            @String.Format("{0:N2} ₺", context.Item.TotalAmount)
+                                        </span>
+                                    </div>
+                                </div>
                             </MudItem>
                         </MudGrid>
                     </CellTemplate>
@@ -186,22 +204,29 @@
 @code {
     private DateTime _startDate = new DateTime(2024, 10, 4);
     private DateTime _endDate = DateTime.Now;
+    private List<Sell> Elements = SellList.Sells;
     private List<string> _plateList = new();
 
-    public void setTime(int day)
+    protected override async Task OnInitializedAsync()
+    {
+        SetSell();
+    }
+
+    public void AddTime(int day)
     {
         _startDate = DateTime.Now.AddDays(-day);
         _endDate = DateTime.Now;
     }
-
     public void SetFilter()
     {
         SetSell();
         Elements = Elements.Where(x => x.CreatedDate >= _startDate && x.CreatedDate < _endDate.AddDays(1)).ToList();
         if (_plateList.Count > 0)
             Elements = Elements.Where(x => _plateList.Contains(x.Plate)).ToList();
-
-
+    }
+    private void SetSell()
+    {
+        Elements = SellList.Sells;
     }
     public void OnStartDateChange(DateTime? newDate)
     {
@@ -213,17 +238,10 @@
         _endDate = newDate ?? DateTime.Now;
         SetFilter();
     }
-    private List<Sell> Elements = SellList.Sells;
-    private void SetSell()
-    {
-        Elements = SellList.Sells;
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        SetSell();
-    }
 
-    private async void PlatePopupOpen()
+    [Inject]
+    private IDialogService DialogService { get; set; } = default!;
+    private async Task PlatePopupOpen()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var result = await DialogService.Show<Layout.PlatePopupComponent>("Plaka seçiniz", options).Result;
@@ -279,6 +297,21 @@
         padding: 15px;
     }
 
+    .itemTitle {
+        width: 50%;
+        float: left;
+        font-weight: bold;
+    }
+
+    .item {
+        width: 50%;
+        float: left;
+    }
+
+        .item span {
+            margin-left: 10px;
+        }
+
     .title {
         font-weight: bold;
         padding: 0px;
@@ -300,7 +333,11 @@
     }
 
     .platePopupButton {
-        cursor: pointer !important;
+        margin-top: -12px;
+        float: right
+    }
+
+    .plateBody {
         border: 1px solid;
         border-radius: 20px;
         width: 100%;

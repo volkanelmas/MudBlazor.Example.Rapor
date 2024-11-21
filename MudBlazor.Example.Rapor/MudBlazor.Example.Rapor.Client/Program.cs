@@ -19,7 +19,6 @@ for (int i = 1; i < 5; i++)
         ProductName = "Akaryakýt",
         Status = "Tamamlandý",
         OrderType = "Pompa",
-
         Plate = "07 TST 320",
         Location = "#1234567",
         DiscountAmount = 0,
@@ -27,7 +26,6 @@ for (int i = 1; i < 5; i++)
         TotalAmount = Convert.ToDecimal("530,1")
     });
 }
-
 Sells.Add(new Sell
 {
     Id = 10,
@@ -36,7 +34,6 @@ Sells.Add(new Sell
     ProductName = "Akaryakýt",
     Status = "Tamamlandý",
     OrderType = "Pompa",
-
     Plate = "07 TST 321",
     Location = "#1234567",
     DiscountAmount = 0,
