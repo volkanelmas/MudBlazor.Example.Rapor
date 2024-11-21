@@ -1,0 +1,317 @@
+﻿@using MudBlazor.Example.Rapor.Client.Model
+@inject ISnackbar Snackbar
+@page "/"
+
+@inject IDialogService DialogService
+
+<PageTitle>Home</PageTitle>
+
+<MudGrid>
+    @* filtre *@
+    <MudItem md="12">
+        <MudGrid>
+            <MudItem md="2">
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowBack"
+                               Class="TitleButtonBack"
+                               Edge="Edge.Start" />
+            </MudItem>
+            <MudItem md="8">
+                <h3 Class="d-flex align-center justify-center py-4">
+                    Satın Alma Geçmişi
+                </h3>
+            </MudItem>
+            <MudItem md="2">
+                <MudIconButton Icon="@Icons.Material.Filled.FormatListBulleted"
+                               Class="TitleButtonFiltre"
+                               Edge="Edge.End" />
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+
+    @* tarih *@
+    <MudItem md="12" Style="padding-left:0px">
+        <MudGrid>
+            <MudItem md="6">
+                <MudDatePicker Date="@_startDate"
+                               Class="DatePicker"
+                               Editable="true"
+                               Underline="false" AdornmentIcon="@Icons.Material.Filled.KeyboardArrowRight" IconSize="Size.Large"
+                               DateChanged="OnStartDateChange" />
+            </MudItem>
+            <MudItem md="6">
+                <MudDatePicker Date="@_endDate"
+                               Class="DatePicker"
+                               Editable="true"
+                               Underline="false" AdornmentIcon="@Icons.Material.Filled.KeyboardArrowRight" IconSize="Size.Large"
+                               DateChanged="OnEndDateChange" />
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+
+    @* plaka popup *@
+    <MudItem md="12" Style="padding-left:0px">
+        <div @onclick="PlatePopupOpen" class="platePopupButton">
+            @if (_plateList != null)
+            {
+                foreach (var item in this._plateList)
+                {
+                    <span class="itemPlate">@item</span>
+                }
+            }
+        </div>
+    </MudItem>
+
+    @* Button hızlı tarih filtre*@
+    <MudItem md="12" Style="padding-left:15px">
+        <MudGrid>
+            <MudItem md="3">
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(1))">Son 24 Saat</MudButton>
+            </MudItem>
+            <MudItem md="3">
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(7))">Son 7 Gün</MudButton>
+            </MudItem>
+            <MudItem md="3">
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(15))">Son 15 Gün</MudButton>
+            </MudItem>
+            <MudItem md="3">
+                <MudButton Variant="Variant.Outlined" Class="filterButton" OnClick="@((e)=> setTime(30))">Son 30 Gün</MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+
+    @* xml e aktar *@
+    <MudItem md="12" Style="padding-left:0px">
+        <MudButton Class="xmlButton">XML Aktar</MudButton>
+    </MudItem>
+
+    @* list *@
+    <MudItem md="12" Style="padding:0px">
+        <MudDataGrid T="Sell" Items="@Elements" Filterable="false" SortMode="@SortMode.None"
+                     GroupExpanded="false" FixedHeader="false"
+                     Style="margin-top:50px">
+            <Columns>
+                <TemplateColumn CellClass="CellClass">
+                    <CellTemplate>
+                        <MudGrid>
+
+                            @* sol sütun01 *@
+                            <MudItem xs="6" Style="border-right:1px solid;">
+                                <MudGrid>
+                                    <MudItem xs="6" Class="title">
+                                        TARİH
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        @context.Item.CreatedDate.ToShortDateString()
+                                    </MudItem>
+                                    <MudItem xs="6" Class="title">
+                                        MÜŞTERİ NO
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        @context.Item.CustomerId
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            @* sağ sütun01 *@
+                            <MudItem xs="6">
+                                <MudGrid>
+                                    <MudItem xs="7" Class="title">
+                                        PLAKA
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        @context.Item.Plate
+                                    </MudItem>
+                                    <MudItem xs="7" Class="title">
+                                        LOKASYON
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        @context.Item.Location
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            @* sol sütun02 *@
+                            <MudItem xs="6" Style="border-right:1px solid;margin-top:20px">
+                                <MudGrid>
+                                    <MudItem xs="6" Class="title">
+                                        ÜRÜN
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        @context.Item.ProductName
+                                    </MudItem>
+                                    <MudItem xs="6" Class="title">
+                                        DURUM
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        @context.Item.Status
+                                    </MudItem>
+                                    <MudItem xs="6" Class="title">
+                                        SİPARİŞ TİPİ
+                                    </MudItem>
+                                    <MudItem xs="6">
+                                        @context.Item.OrderType
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                            @* sağ sütun02 *@
+                            <MudItem xs="6" Style=";margin-top:20px">
+                                <MudGrid>
+                                    <MudItem xs="7" Class="title">
+                                        İNDİRİM TUTARI
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        @context.Item.DiscountAmount
+                                    </MudItem>
+                                    <MudItem xs="7" Class="title">
+                                        TOPLAM ADET
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        @context.Item.TotalPiece
+                                    </MudItem>
+                                    <MudItem xs="7" Class="title">
+                                        TOPLAM TUTAR
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        @context.Item.TotalAmount
+                                    </MudItem>
+                                </MudGrid>
+                            </MudItem>
+                        </MudGrid>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+
+</MudGrid>
+
+@code {
+    private DateTime _startDate = new DateTime(2024, 10, 4);
+    private DateTime _endDate = DateTime.Now;
+    private List<string> _plateList = new();
+
+    public void setTime(int day)
+    {
+        _startDate = DateTime.Now.AddDays(-day);
+        _endDate = DateTime.Now;
+    }
+
+    public void SetFilter()
+    {
+        SetSell();
+        Elements = Elements.Where(x => x.CreatedDate >= _startDate && x.CreatedDate < _endDate.AddDays(1)).ToList();
+        if (_plateList.Count > 0)
+            Elements = Elements.Where(x => _plateList.Contains(x.Plate)).ToList();
+
+
+    }
+    public void OnStartDateChange(DateTime? newDate)
+    {
+        _startDate = newDate ?? DateTime.Now;
+        SetFilter();
+    }
+    public void OnEndDateChange(DateTime? newDate)
+    {
+        _endDate = newDate ?? DateTime.Now;
+        SetFilter();
+    }
+    private List<Sell> Elements = SellList.Sells;
+    private void SetSell()
+    {
+        Elements = SellList.Sells;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        SetSell();
+    }
+
+    private async void PlatePopupOpen()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var result = await DialogService.Show<Layout.PlatePopupComponent>("Plaka seçiniz", options).Result;
+        if (result.Data != null)
+        {
+            this._plateList = result.Data as List<string>;
+            base.OnInitialized();
+            SetFilter();
+        }
+    }
+}
+
+<style>
+
+    .TitleButtonBack {
+        background-color: black;
+        color: white;
+        height: 50px;
+        width: 50px;
+        left: 0px
+    }
+
+    .TitleButtonFiltre {
+        background-color: white;
+        color: black;
+        height: 50px;
+        width: 50px;
+        right: 0px
+    }
+
+    .DatePicker {
+        border: 1px solid;
+        border-radius: 20px;
+        padding: 10px 20px;
+        color: black;
+    }
+
+    .filterButton {
+        font-size: 13px;
+        font-weight: bold;
+        border-radius: 15px;
+        text-transform: none;
+        padding: 12px 8px;
+    }
+
+    .xmlButton {
+        background-color: black;
+        color: white;
+        width: 100%;
+        font-size: 22px;
+        text-transform: none;
+        border-radius: 20px;
+        padding: 15px;
+    }
+
+    .title {
+        font-weight: bold;
+        padding: 0px;
+    }
+
+    .mud-table-head {
+        display: none !important;
+    }
+
+
+    .CellClass {
+        border: 1px solid;
+        border-color: black;
+        border-radius: 20px;
+    }
+
+    .mud-table-body {
+        border: none
+    }
+
+    .platePopupButton {
+        cursor: pointer !important;
+        border: 1px solid;
+        border-radius: 20px;
+        width: 100%;
+        height: 60px;
+        padding-top: 18px;
+    }
+
+    .itemPlate {
+        background-color: #c4c4c4;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 10px;
+    }
+</style>

@@ -1,0 +1,61 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Class="MenuAppBar" >
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+        <div>
+            <span class="MenuTitleName">Mehmet Gülsever</span>
+            <MudSpacer />
+            <span>YÖNETİCİ </span>
+            <span class="MenuTitleCostomer">Kamil Koç Otobüsleri A.Ş.</span>
+        </div>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.LogoDev" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudDrawer ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer Class="container">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+
+}
+
+<style>
+
+    .MenuAppBar {
+        max-width: 500px;
+        width: 100%;
+        margin: 0px auto;
+        background-color: white;
+        color: black
+    }
+
+    .MenuTitleName {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .MenuTitleCostomer {
+        font-size: 12px;
+        margin-left: 20px;
+    }
+
+    .container {
+        max-width: 500px;
+        width: 100%;
+        margin: 0px auto;
+        padding: 10px 0px;
+        padding-left: 24px
+    }
+</style>

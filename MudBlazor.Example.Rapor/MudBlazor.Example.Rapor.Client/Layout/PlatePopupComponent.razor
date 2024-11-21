@@ -1,0 +1,44 @@
+﻿@using MudBlazor.Example.Rapor.Client.Model
+
+<MudDialog>
+    <DialogContent>
+        <div class="d-flex flex-column py-1">
+
+            <MudDataGrid T="String" Items="@Elements" Filterable="false" SortMode="@SortMode.None"
+                         GroupExpanded="false" FixedHeader="false">
+                <Columns>
+
+                    <TemplateColumn CellClass="d-flex justify-end">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudButton Size="@Size.Small" Variant="@Variant.Filled"
+                                           @onclick="@(x => PlateSelect(@context.Item))">@context.Item</MudButton>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+
+                    @* <PropertyColumn Property="x => x" Title="Plaka" Style="cursor:pointer" /> *@
+                </Columns>
+            </MudDataGrid>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="OK">Tamam</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private List<string> Elements = SellList.Sells.Select(x => x.Plate).Distinct().ToList();
+    private List<string> _plateList = new();
+
+    private void PlateSelect(string value)
+    {
+        if (!_plateList.Where(x => x == value).Any())
+        {
+            _plateList.Add(value);
+        }
+    }
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private async void OK() => this.MudDialog.Close(DialogResult.Ok(this._plateList));
+}
